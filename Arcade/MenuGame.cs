@@ -63,28 +63,64 @@ sealed class MenuGame : IGame
         Gfx.Line(new Vector2(cx - 280, 150), new Vector2(cx + 280, 150), 2f, Dim);
         Centered("choose your game", 164, 20, Dim);
 
-        float top = Math.Max(230, h / 2f - _entries.Count * 55);
-        float left = cx - 340;
+        // Each entry sits in a frame; descriptions wrap inside it so they never spill past the edge.
+        const int descSize = 17;
+        const int descLine = 22;
+        const int textIndent = 100;   // room for the icon, from the frame's left edge
+        const int textPadRight = 24;
+        float frameW = Math.Min(760f, w - 60f);
+        float frameLeft = cx - frameW / 2f;
+        int textWidth = (int)frameW - textIndent - textPadRight;
+
+        float y = 230f;
         for (int i = 0; i < _entries.Count; i++)
         {
             var e = _entries[i];
             bool sel = i == _selected;
-            float y = top + i * 120;
             Color main = sel ? Green : Dim;
+            List<string> lines = Wrap(e.Description, descSize, textWidth);
+            float frameH = 14 + 48 + lines.Count * descLine + 10;
 
             if (sel)
             {
                 float pulse = 0.5f + 0.5f * MathF.Sin(_time * 6f);
                 Color frame = Gfx.Fade(Green, 0.45f + 0.4f * pulse);
-                Gfx.Rect(left - 20, y - 14, 680, 96, frame);
+                Gfx.Rect(frameLeft, y, frameW, frameH, frame);
             }
 
-            DrawIcon(e.Icon, new Vector2(left + 40, y + 34), sel ? Green : Dim, sel);
-            Gfx.Text($"{i + 1}.  {e.Title}", (int)left + 100, (int)y, 34, main);
-            Gfx.Text(e.Description, (int)left + 100, (int)y + 48, 17, sel ? Rock : Dim);
+            float iconY = y + 14 + 34;
+            DrawIcon(e.Icon, new Vector2(frameLeft + 50, iconY), sel ? Green : Dim, sel);
+            Gfx.Text($"{i + 1}.  {e.Title}", (int)frameLeft + textIndent, (int)y + 14, 34, main);
+            for (int l = 0; l < lines.Count; l++)
+                Gfx.Text(lines[l], (int)frameLeft + textIndent, (int)y + 14 + 48 + l * descLine, descSize, sel ? Rock : Dim);
+
+            y += frameH + 26;
         }
 
         Centered("UP/DOWN select    ENTER start    ESC quit (ESC in a game returns here)", h - 40, 16, Dim);
+    }
+
+    /// <summary>Greedy word-wrap so that no line is wider than <paramref name="maxWidth"/> pixels.</summary>
+    static List<string> Wrap(string text, int size, int maxWidth)
+    {
+        var lines = new List<string>();
+        string current = "";
+        foreach (string word in text.Split(' ', StringSplitOptions.RemoveEmptyEntries))
+        {
+            string candidate = current.Length == 0 ? word : current + " " + word;
+            if (current.Length > 0 && Gfx.Measure(candidate, size) > maxWidth)
+            {
+                lines.Add(current);
+                current = word;
+            }
+            else
+            {
+                current = candidate;
+            }
+        }
+        if (current.Length > 0)
+            lines.Add(current);
+        return lines;
     }
 
     /// <summary>Slowly drifting "+" markers, like the ones in the games.</summary>
