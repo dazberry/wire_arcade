@@ -22,6 +22,10 @@ var entries = new List<MenuEntry>
         "First-person tank battle on a 3D wireframe plain. Hunt tanks, missiles and saucers - and watch the radar.",
         MenuIcon.Tank,
         () => new TankZone.TankGame()),
+    new("TRENCH RUN",
+        "A first-person assault on a battle station: dogfight in space, skim the surface, then fly the trench and hit the reactor port.",
+        MenuIcon.Trench,
+        () => new TrenchRun.TrenchGame()),
 };
 
 menu = new MenuGame(entries, entry =>

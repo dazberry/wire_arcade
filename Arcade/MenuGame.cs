@@ -5,7 +5,7 @@ using WireGames;
 
 namespace Arcade;
 
-enum MenuIcon { Asteroid, Lander, Tank }
+enum MenuIcon { Asteroid, Lander, Tank, Trench }
 
 sealed record MenuEntry(string Title, string Description, MenuIcon Icon, Func<IGame> Create);
 
@@ -59,27 +59,31 @@ sealed class MenuGame : IGame
 
         DrawBackdrop(w, h);
 
-        Centered("WIRE  ARCADE", 70, 64, Green);
-        Gfx.Line(new Vector2(cx - 280, 150), new Vector2(cx + 280, 150), 2f, Dim);
-        Centered("choose your game", 164, 20, Dim);
-
         // Each entry sits in a frame; descriptions wrap inside it so they never spill past the edge.
-        const int descSize = 17;
-        const int descLine = 22;
+        // If the roomy layout doesn't fit the window, fall back to a compact one so every game stays on screen.
         const int textIndent = 100;   // room for the icon, from the frame's left edge
         const int textPadRight = 24;
         float frameW = Math.Min(760f, w - 60f);
         float frameLeft = cx - frameW / 2f;
         int textWidth = (int)frameW - textIndent - textPadRight;
+        float bottomLimit = h - 55f;
 
-        float y = 230f;
+        Layout lay = Layout.Roomy;
+        if (!Fits(lay, textWidth, bottomLimit))
+            lay = Layout.Compact;
+
+        Centered("WIRE  ARCADE", lay.TitleY, lay.TitleSize, Green);
+        Gfx.Line(new Vector2(cx - 280, lay.RuleY), new Vector2(cx + 280, lay.RuleY), 2f, Dim);
+        Centered("choose your game", lay.SubY, 20, Dim);
+
+        float y = lay.StartY;
         for (int i = 0; i < _entries.Count; i++)
         {
             var e = _entries[i];
             bool sel = i == _selected;
             Color main = sel ? Green : Dim;
-            List<string> lines = Wrap(e.Description, descSize, textWidth);
-            float frameH = 14 + 48 + lines.Count * descLine + 10;
+            List<string> lines = Wrap(e.Description, lay.DescSize, textWidth);
+            float frameH = lay.FrameHeight(lines.Count);
 
             if (sel)
             {
@@ -88,16 +92,34 @@ sealed class MenuGame : IGame
                 Gfx.Rect(frameLeft, y, frameW, frameH, frame);
             }
 
-            float iconY = y + 14 + 34;
-            DrawIcon(e.Icon, new Vector2(frameLeft + 50, iconY), sel ? Green : Dim, sel);
-            Gfx.Text($"{i + 1}.  {e.Title}", (int)frameLeft + textIndent, (int)y + 14, 34, main);
+            DrawIcon(e.Icon, new Vector2(frameLeft + 50, y + frameH / 2f), sel ? Green : Dim, sel);
+            Gfx.Text($"{i + 1}.  {e.Title}", (int)frameLeft + textIndent, (int)y + lay.PadTop, lay.EntryTitleSize, main);
             for (int l = 0; l < lines.Count; l++)
-                Gfx.Text(lines[l], (int)frameLeft + textIndent, (int)y + 14 + 48 + l * descLine, descSize, sel ? Rock : Dim);
+                Gfx.Text(lines[l], (int)frameLeft + textIndent, (int)y + lay.PadTop + lay.TitleToDesc + l * lay.DescLine, lay.DescSize, sel ? Rock : Dim);
 
-            y += frameH + 26;
+            y += frameH + lay.Gap;
         }
 
         Centered("UP/DOWN select    ENTER start    ESC quit (ESC in a game returns here)", h - 40, 16, Dim);
+    }
+
+    /// <summary>Sizes and spacing for the entry list.</summary>
+    sealed record Layout(
+        int TitleY, int TitleSize, int RuleY, int SubY, float StartY,
+        int EntryTitleSize, int DescSize, int DescLine, int PadTop, int TitleToDesc, int PadBottom, int Gap)
+    {
+        public static readonly Layout Roomy = new(70, 64, 150, 164, 230f, 34, 17, 22, 14, 48, 10, 26);
+        public static readonly Layout Compact = new(30, 48, 100, 108, 150f, 28, 16, 20, 10, 40, 8, 16);
+
+        public float FrameHeight(int descLines) => PadTop + TitleToDesc + descLines * DescLine + PadBottom;
+    }
+
+    bool Fits(Layout lay, int textWidth, float bottomLimit)
+    {
+        float y = lay.StartY;
+        foreach (var e in _entries)
+            y += lay.FrameHeight(Wrap(e.Description, lay.DescSize, textWidth).Count) + lay.Gap;
+        return y - lay.Gap <= bottomLimit;
     }
 
     /// <summary>Greedy word-wrap so that no line is wider than <paramref name="maxWidth"/> pixels.</summary>
@@ -158,6 +180,25 @@ sealed class MenuGame : IGame
                     prev = p;
                 }
                 Gfx.Line(prev, first, 1.6f, color);
+                break;
+            }
+
+            case MenuIcon.Trench:
+            {
+                // looking down a trench: two walls converging on a vanishing point, with cross-bars
+                Vector2 P(float x, float y) => c + new Vector2(x, y) * 1.4f;
+                Gfx.Line(P(-20, 16), P(-3, -3), 1.6f, color);
+                Gfx.Line(P(20, 16), P(3, -3), 1.6f, color);
+                Gfx.Line(P(-20, -16), P(-3, -5), 1.6f, color);
+                Gfx.Line(P(20, -16), P(3, -5), 1.6f, color);
+                Gfx.Line(P(-3, -3), P(3, -3), 1.6f, color);
+                Gfx.Line(P(-3, -5), P(3, -5), 1.6f, color);
+                Gfx.Line(P(-11, 8), P(11, 8), 1.2f, color);
+                Gfx.Line(P(-7, 2), P(7, 2), 1.2f, color);
+                // a gun sight, pulsing when selected
+                float s = spin ? 5f + 2f * MathF.Sin(_time * 8f) : 5f;
+                Gfx.Line(P(-s - 3, -4), P(-3, -4), 1.4f, Amber);
+                Gfx.Line(P(3, -4), P(s + 3, -4), 1.4f, Amber);
                 break;
             }
 
