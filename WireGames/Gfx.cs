@@ -73,6 +73,11 @@ public static class Gfx
     public static void FillRect(float x, float y, float w, float h, Color c) =>
         _g.FillRectangle(BrushFor(c), x, y, w, h);
 
+    /// <summary>Restrict all further drawing to a rectangle (until <see cref="ResetClip"/>).</summary>
+    public static void SetClip(float x, float y, float w, float h) => _g.SetClip(new RectangleF(x, y, w, h));
+
+    public static void ResetClip() => _g.ResetClip();
+
     public static void Text(string text, int x, int y, int size, Color c) =>
         _g.DrawString(text, FontFor(size), BrushFor(c), x, y, StringFormat.GenericTypographic);
 

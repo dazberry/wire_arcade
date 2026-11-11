@@ -8,6 +8,7 @@ whole world moves (and in Asteroids, rotates) around it.
 | --- | --- |
 | **Relative Asteroids** | Classic Asteroids, but the ship is fixed in place, pointing up. Turning rotates the entire screen; thrusting makes the asteroids slide past. |
 | **Lunar Lander** | Undock from a mothership, land on a pad, then lift off and dock again. The lander is fixed at the centre and the moon scrolls past underneath. |
+| **Tank Zone** | A first-person 3D wireframe tank battle, inspired by the 1980 Atari arcade game *Battlezone*. Hunt tanks, missiles and flying saucers on a plain of pyramids and blocks. |
 
 Everything is drawn as simple lines with GDI+ (no GPU, OpenGL driver or third-party
 packages required).
@@ -34,6 +35,7 @@ Or run a game directly:
 ```bash
 dotnet run -c Release --project RelativeAsteroids
 dotnet run -c Release --project LunarLander
+dotnet run -c Release --project TankZone
 ```
 
 In the menu use **Up/Down** and **Enter** (or the number keys) to choose a game.
@@ -84,6 +86,44 @@ horizontal speed, and rising slower than 32. Anything else is a crash.
 The strip along the bottom of the screen is a radar showing the whole moon laid out flat: each
 landing pad with its multiplier and distance, and the mothership (`MS`).
 
+## Tank Zone
+
+A first-person tank game with a small 3D wireframe engine (perspective projection with near-plane
+clipping). You are in a tank on a flat plain dotted with pyramids and blocks that block movement
+and shells. A mountain range, a crescent moon and an erupting volcano sit on the horizon. The
+enemy closes in from all around, so keep an eye on the radar at the top.
+
+| Key | Action |
+| --- | --- |
+| W / Up | Drive forward |
+| S / Down | Reverse (slower) |
+| A / D or Left / Right | Turn the tank |
+| Space | Fire (one shell at a time) |
+| G | Toggle a ground grid (handy for judging your own movement) |
+| P | Pause |
+| Enter | Restart after game over |
+
+**Enemies and scoring**
+
+| Enemy | Points | Notes |
+| --- | --- | --- |
+| Tank | 1,000 | Slow. Can't fire for 2 seconds after appearing. |
+| Missile | 2,000 | Appears from 5,000 points. Fast and small; hops over obstacles; later ones swerve. |
+| Super tank | 3,000 | Replaces ordinary tanks after the sixth missile. Faster and quicker to fire. |
+| Flying saucer | 5,000 | From 2,000 points. Doesn't attack and isn't on the radar; shoot it down for a bonus. A flashing "FLYING SAUCER!" warns you it's about. |
+
+- While the enemy is ahead on points, tanks appear in front of you and shoot poorly. Once you lead
+  by 7,000 they appear from any direction and attack with full aggression. Every time you are
+  destroyed the enemy's score goes up by 1,000.
+- You start with 3 tanks and earn a bonus tank at 15,000 and again at 100,000 points.
+- When you are hit the windshield cracks.
+- The radar shows enemy tanks and missiles (not saucers or obstacles); the lines mark your 90 degree
+  field of view. A status line reports `ENEMY IN RANGE`, `ENEMY TO LEFT/RIGHT/REAR` and
+  `MOTION BLOCKED BY OBJECT`.
+
+This is a from-scratch homage rather than a port, so details (obstacle layout, timings, exact AI) are
+approximations.
+
 ## Project layout
 
 ```
@@ -91,6 +131,7 @@ wire_arcade.sln
 WireGames/          shared library: GDI+ drawing helpers, keyboard input, window + game loop
 RelativeAsteroids/  the Asteroids game
 LunarLander/        the Lunar Lander game
+TankZone/           the first-person 3D tank game
 Arcade/             the start menu that launches either game (WireArcade.exe)
 ```
 

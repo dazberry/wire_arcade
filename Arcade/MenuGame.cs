@@ -5,7 +5,7 @@ using WireGames;
 
 namespace Arcade;
 
-enum MenuIcon { Asteroid, Lander }
+enum MenuIcon { Asteroid, Lander, Tank }
 
 sealed record MenuEntry(string Title, string Description, MenuIcon Icon, Func<IGame> Create);
 
@@ -158,6 +158,25 @@ sealed class MenuGame : IGame
                     prev = p;
                 }
                 Gfx.Line(prev, first, 1.6f, color);
+                break;
+            }
+
+            case MenuIcon.Tank:
+            {
+                Vector2 P(float x, float y) => c + new Vector2(x, y) * 1.5f;
+                Vector2[] hull = { P(-17, 8), P(17, 8), P(12, -2), P(-12, -2) };
+                for (int i = 0; i < hull.Length; i++)
+                    Gfx.Line(hull[i], hull[(i + 1) % hull.Length], 1.6f, color);
+                Gfx.Line(P(-6, -2), P(-6, -9), 1.6f, color);
+                Gfx.Line(P(-6, -9), P(6, -9), 1.6f, color);
+                Gfx.Line(P(6, -9), P(7, -2), 1.6f, color);
+                Gfx.Line(P(6, -6), P(22, -6), 1.6f, color);
+                if (spin)
+                {
+                    // a muzzle flash when selected
+                    float f = 4f + 4f * MathF.Abs(MathF.Sin(_time * 8f));
+                    Gfx.Line(P(23, -6), P(23 + f, -6), 1.6f, Amber);
+                }
                 break;
             }
 

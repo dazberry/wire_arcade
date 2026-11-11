@@ -18,6 +18,10 @@ var entries = new List<MenuEntry>
         "Undock from the mothership, land on a pad, then lift off and dock again.",
         MenuIcon.Lander,
         () => new LunarLander.LanderGame()),
+    new("TANK ZONE",
+        "First-person tank battle on a 3D wireframe plain. Hunt tanks, missiles and saucers - and watch the radar.",
+        MenuIcon.Tank,
+        () => new TankZone.TankGame()),
 };
 
 menu = new MenuGame(entries, entry =>
