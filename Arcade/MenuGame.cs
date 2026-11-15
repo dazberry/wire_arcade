@@ -5,7 +5,7 @@ using WireGames;
 
 namespace Arcade;
 
-enum MenuIcon { Asteroid, Lander, Tank, Trench, Pinball }
+enum MenuIcon { Asteroid, Lander, Tank, Trench, Pinball, Invaders }
 
 sealed record MenuEntry(string Title, string Description, MenuIcon Icon, Func<IGame> Create);
 
@@ -202,6 +202,23 @@ sealed class MenuGame : IGame
                 float s = spin ? 5f + 2f * MathF.Sin(_time * 8f) : 5f;
                 Gfx.Line(P(-s - 3, -4), P(-3, -4), 1.4f, Amber);
                 Gfx.Line(P(3, -4), P(s + 3, -4), 1.4f, Amber);
+                break;
+            }
+
+            case MenuIcon.Invaders:
+            {
+                Vector2 P(float x, float y) => c + new Vector2(x, y) * 1.4f;
+                // a crab-like invader that shuffles its legs when selected
+                int f = spin ? (int)(_time * 3f) % 2 : 0;
+                Vector2[] body = { P(-8, -10), P(8, -10), P(14, -4), P(14, 4), P(-14, 4), P(-14, -4) };
+                for (int i = 0; i < body.Length; i++)
+                    Gfx.Line(body[i], body[(i + 1) % body.Length], 1.6f, color);
+                Gfx.Line(P(-8, -10), P(-12, -15), 1.4f, color);
+                Gfx.Line(P(8, -10), P(12, -15), 1.4f, color);
+                Gfx.Line(P(-6, 4), P(-6 - (f == 0 ? 3 : -1), 12), 1.4f, color);
+                Gfx.Line(P(6, 4), P(6 + (f == 0 ? 3 : -1), 12), 1.4f, color);
+                Gfx.Line(P(-3, -3), P(-3, -1), 1.6f, Amber);
+                Gfx.Line(P(3, -3), P(3, -1), 1.6f, Amber);
                 break;
             }
 

@@ -30,6 +30,10 @@ var entries = new List<MenuEntry>
         "A full pinball table drawn in pure vectors: flippers, bumpers, slings and a plunger.",
         MenuIcon.Pinball,
         () => new VectorPinball.PinballGame()),
+    new("VECTOR INVADERS",
+        "The classic fixed shooter in outline: march-down aliens, crumbling shields and a mystery saucer.",
+        MenuIcon.Invaders,
+        () => new VectorInvaders.InvadersGame()),
 };
 
 menu = new MenuGame(entries, entry =>

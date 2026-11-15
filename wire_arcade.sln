@@ -17,6 +17,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TrenchRun", "TrenchRun\Tren
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "VectorPinball", "VectorPinball\VectorPinball.csproj", "{E2A856A8-1902-4463-A673-E46B28810428}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "VectorInvaders", "VectorInvaders\VectorInvaders.csproj", "{E4A1BB3A-68DC-449A-BEF5-C37DC9E2B78E}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -111,6 +113,18 @@ Global
 		{E2A856A8-1902-4463-A673-E46B28810428}.Release|x64.Build.0 = Release|Any CPU
 		{E2A856A8-1902-4463-A673-E46B28810428}.Release|x86.ActiveCfg = Release|Any CPU
 		{E2A856A8-1902-4463-A673-E46B28810428}.Release|x86.Build.0 = Release|Any CPU
+		{E4A1BB3A-68DC-449A-BEF5-C37DC9E2B78E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{E4A1BB3A-68DC-449A-BEF5-C37DC9E2B78E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{E4A1BB3A-68DC-449A-BEF5-C37DC9E2B78E}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{E4A1BB3A-68DC-449A-BEF5-C37DC9E2B78E}.Debug|x64.Build.0 = Debug|Any CPU
+		{E4A1BB3A-68DC-449A-BEF5-C37DC9E2B78E}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{E4A1BB3A-68DC-449A-BEF5-C37DC9E2B78E}.Debug|x86.Build.0 = Debug|Any CPU
+		{E4A1BB3A-68DC-449A-BEF5-C37DC9E2B78E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{E4A1BB3A-68DC-449A-BEF5-C37DC9E2B78E}.Release|Any CPU.Build.0 = Release|Any CPU
+		{E4A1BB3A-68DC-449A-BEF5-C37DC9E2B78E}.Release|x64.ActiveCfg = Release|Any CPU
+		{E4A1BB3A-68DC-449A-BEF5-C37DC9E2B78E}.Release|x64.Build.0 = Release|Any CPU
+		{E4A1BB3A-68DC-449A-BEF5-C37DC9E2B78E}.Release|x86.ActiveCfg = Release|Any CPU
+		{E4A1BB3A-68DC-449A-BEF5-C37DC9E2B78E}.Release|x86.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

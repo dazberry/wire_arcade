@@ -17,6 +17,7 @@
     <ProjectReference Include="..\TankZone\TankZone.csproj" />
     <ProjectReference Include="..\TrenchRun\TrenchRun.csproj" />
     <ProjectReference Include="..\VectorPinball\VectorPinball.csproj" />
+    <ProjectReference Include="..\VectorInvaders\VectorInvaders.csproj" />
   </ItemGroup>
 
 </Project>
