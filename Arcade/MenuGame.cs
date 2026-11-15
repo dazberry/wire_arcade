@@ -5,7 +5,7 @@ using WireGames;
 
 namespace Arcade;
 
-enum MenuIcon { Asteroid, Lander, Tank, Trench }
+enum MenuIcon { Asteroid, Lander, Tank, Trench, Pinball }
 
 sealed record MenuEntry(string Title, string Description, MenuIcon Icon, Func<IGame> Create);
 
@@ -71,6 +71,8 @@ sealed class MenuGame : IGame
         Layout lay = Layout.Roomy;
         if (!Fits(lay, textWidth, bottomLimit))
             lay = Layout.Compact;
+        if (!Fits(lay, textWidth, bottomLimit))
+            lay = Layout.Tight;
 
         Centered("WIRE  ARCADE", lay.TitleY, lay.TitleSize, Green);
         Gfx.Line(new Vector2(cx - 280, lay.RuleY), new Vector2(cx + 280, lay.RuleY), 2f, Dim);
@@ -110,6 +112,7 @@ sealed class MenuGame : IGame
     {
         public static readonly Layout Roomy = new(70, 64, 150, 164, 230f, 34, 17, 22, 14, 48, 10, 26);
         public static readonly Layout Compact = new(30, 48, 100, 108, 150f, 28, 16, 20, 10, 40, 8, 16);
+        public static readonly Layout Tight = new(14, 40, 70, 76, 106f, 26, 15, 18, 6, 34, 6, 8);
 
         public float FrameHeight(int descLines) => PadTop + TitleToDesc + descLines * DescLine + PadBottom;
     }
@@ -199,6 +202,22 @@ sealed class MenuGame : IGame
                 float s = spin ? 5f + 2f * MathF.Sin(_time * 8f) : 5f;
                 Gfx.Line(P(-s - 3, -4), P(-3, -4), 1.4f, Amber);
                 Gfx.Line(P(3, -4), P(s + 3, -4), 1.4f, Amber);
+                break;
+            }
+
+            case MenuIcon.Pinball:
+            {
+                Vector2 P(float x, float y) => c + new Vector2(x, y) * 1.4f;
+                // two flippers and a ball above them
+                Gfx.Line(P(-18, 12), P(-4, 17), 1.6f, color);
+                Gfx.Line(P(18, 12), P(4, 17), 1.6f, color);
+                Gfx.Line(P(-18, 8), P(-4, 13), 1.2f, color);
+                Gfx.Line(P(18, 8), P(4, 13), 1.2f, color);
+                float by = spin ? -2f - 8f * MathF.Abs(MathF.Sin(_time * 4f)) : -4f;
+                Gfx.CircleOutline(P(0, by), 5f, Amber);
+                // a bumper
+                Gfx.CircleOutline(P(-12, -14), 5f, color);
+                Gfx.CircleOutline(P(12, -14), 5f, color);
                 break;
             }
 

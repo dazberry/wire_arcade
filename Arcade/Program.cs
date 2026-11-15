@@ -26,6 +26,10 @@ var entries = new List<MenuEntry>
         "A first-person assault on a battle station: dogfight in space, skim the surface, then fly the trench and hit the reactor port.",
         MenuIcon.Trench,
         () => new TrenchRun.TrenchGame()),
+    new("VECTOR PINBALL",
+        "A full pinball table drawn in pure vectors: flippers, bumpers, slings and a plunger.",
+        MenuIcon.Pinball,
+        () => new VectorPinball.PinballGame()),
 };
 
 menu = new MenuGame(entries, entry =>

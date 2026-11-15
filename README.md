@@ -10,6 +10,7 @@ whole world moves (and in Asteroids, rotates) around it.
 | **Lunar Lander** | Undock from a mothership, land on a pad, then lift off and dock again. The lander is fixed at the centre and the moon scrolls past underneath. |
 | **Tank Zone** | A first-person 3D wireframe tank battle, inspired by the 1980 Atari arcade game *Battlezone*. Hunt tanks, missiles and flying saucers on a plain of pyramids and blocks. |
 | **Trench Run** | A first-person space assault, inspired by Atari's 1983 vector arcade game *Star Wars*. Dogfight in space, skim the surface of a battle station, then fly the trench and put a torpedo into the reactor port. |
+| **Vector Pinball** | A full pinball table drawn in pure vectors: plunger, flippers, pop bumpers, slingshots and stand-up targets, with a three-ball game and a multiplier. |
 
 Everything is drawn as simple lines with GDI+ (no GPU, OpenGL driver or third-party
 packages required).
@@ -38,6 +39,7 @@ dotnet run -c Release --project RelativeAsteroids
 dotnet run -c Release --project LunarLander
 dotnet run -c Release --project TankZone
 dotnet run -c Release --project TrenchRun
+dotnet run -c Release --project VectorPinball
 ```
 
 In the menu use **Up/Down** and **Enter** (or the number keys) to choose a game.

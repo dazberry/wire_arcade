@@ -16,6 +16,7 @@
     <ProjectReference Include="..\LunarLander\LunarLander.csproj" />
     <ProjectReference Include="..\TankZone\TankZone.csproj" />
     <ProjectReference Include="..\TrenchRun\TrenchRun.csproj" />
+    <ProjectReference Include="..\VectorPinball\VectorPinball.csproj" />
   </ItemGroup>
 
 </Project>
